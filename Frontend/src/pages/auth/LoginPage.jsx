@@ -112,6 +112,17 @@ export default function LoginPage() {
           Don't have an account?{' '}
           <Link to="/signup" className={styles.switchLink}>Create one free</Link>
         </p>
+
+        {/* Guest / dev access */}
+        <div className={styles.divider}><span>or</span></div>
+        <button
+          id="browse-as-guest"
+          type="button"
+          className={styles.guestBtn}
+          onClick={() => navigate('/customer')}
+        >
+          Browse without login →
+        </button>
       </div>
     </div>
   );

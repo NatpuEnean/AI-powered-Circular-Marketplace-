@@ -9,8 +9,7 @@ export default function Sidebar({ role, open, onClose }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  // Map auth role to nav role key
-  const navRole = role || (user?.role?.toLowerCase());
+  const navRole = role || (user?.role?.toLowerCase()) || 'customer';
   const items = navByRole[navRole] ?? [];
 
   function handleLogout() {

@@ -1,8 +1,12 @@
 import { useRef, useState } from 'react';
-import { Heart, MapPin, Clock } from 'lucide-react';
+import { Heart, MapPin, Clock, ShoppingCart } from 'lucide-react';
 import styles from './ProductCard.module.css';
 import { cn } from '../../lib/cn';
-import { discountPercent } from '../../data/products';
+
+function calcDiscount(price, originalPrice) {
+  if (!originalPrice || originalPrice <= price) return null;
+  return Math.round((1 - price / originalPrice) * 100);
+}
 
 export default function ProductCard({ product, wishlisted, onToggleWishlist }) {
   const cardRef = useRef(null);
@@ -31,6 +35,15 @@ export default function ProductCard({ product, wishlisted, onToggleWishlist }) {
     onToggleWishlist?.(product.id, !wished);
   }
 
+  const discount = calcDiscount(product.price, product.originalPrice);
+  // Support both "distanceKm" (from API) and "distance" (legacy mock)
+  const distLabel = product.distanceKm != null
+    ? `${product.distanceKm} km`
+    : product.distance ?? null;
+
+  const imageSrc = product.image
+    || `https://source.unsplash.com/400x300/?${encodeURIComponent(product.category || 'product')}&sig=${product.id}`;
+
   return (
     <div
       ref={cardRef}
@@ -39,8 +52,12 @@ export default function ProductCard({ product, wishlisted, onToggleWishlist }) {
       onMouseLeave={handleMouseLeave}
     >
       <div className={styles.imageWrap}>
-        <img src={product.image} alt={product.name} className={styles.image} loading="lazy" />
-        <span className={styles.badge}>{discountPercent(product)}% OFF</span>
+        <img src={imageSrc} alt={product.name} className={styles.image} loading="lazy" />
+
+        {discount != null && discount > 0 && (
+          <span className={styles.badge}>{discount}% OFF</span>
+        )}
+
         <button
           className={cn(styles.wishlistBtn, wished && styles.wishlistActive)}
           onClick={handleWishlist}
@@ -49,26 +66,44 @@ export default function ProductCard({ product, wishlisted, onToggleWishlist }) {
         >
           <Heart size={15} strokeWidth={2} />
         </button>
-        <span className={styles.expiryTag}>
-          <Clock size={11} />
-          {product.expiry}
-        </span>
+
+        {product.expiry && (
+          <span className={styles.expiryTag}>
+            <Clock size={11} />
+            {product.expiry}
+          </span>
+        )}
+
+        {product.condition && (
+          <span className={styles.conditionTag}>{product.condition}</span>
+        )}
       </div>
 
       <div className={styles.body}>
+        <p className={styles.category}>{product.category}</p>
         <h3 className={styles.name}>{product.name}</h3>
+
         <div className={styles.metaRow}>
-          <span className={styles.metaItem}>
-            <MapPin size={12} />
-            {product.distance}
-          </span>
-          <span>{product.seller}</span>
+          {distLabel && (
+            <span className={styles.metaItem}>
+              <MapPin size={12} />
+              {distLabel}
+            </span>
+          )}
+          {product.seller && <span className={styles.seller}>{product.seller}</span>}
         </div>
+
         <div className={styles.priceRow}>
-          <span className={styles.price}>₹{product.price}</span>
-          <span className={styles.originalPrice}>₹{product.originalPrice}</span>
+          <span className={styles.price}>₹{Number(product.price).toLocaleString('en-IN')}</span>
+          {product.originalPrice && product.originalPrice > product.price && (
+            <span className={styles.originalPrice}>₹{Number(product.originalPrice).toLocaleString('en-IN')}</span>
+          )}
         </div>
-        <button className={styles.viewBtn}>View Product</button>
+
+        <button className={styles.viewBtn}>
+          <ShoppingCart size={14} />
+          Add to Cart
+        </button>
       </div>
     </div>
   );

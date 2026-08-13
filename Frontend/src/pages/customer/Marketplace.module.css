@@ -1,86 +1,236 @@
 .topBar {
   display: flex;
-  flex-wrap: wrap;
   gap: 0.75rem;
   align-items: center;
-  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
 }
 
 .searchWrap {
+  flex: 1;
+  min-width: 200px;
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  background: rgb(var(--c-moss-900));
-  border: 1px solid rgba(var(--c-moss-700), 0.6);
-  border-radius: 0.65rem;
-  padding: 0.65rem 1rem;
-  flex: 1;
-  min-width: 280px;
-  max-width: 500px;
-  transition: border-color 0.2s ease;
+  background: rgba(var(--c-moss-800), 0.9);
+  border: 1px solid rgba(var(--c-moss-700), 0.8);
+  border-radius: 12px;
+  padding: 0.65rem 0.9rem;
+  transition: border-color 0.2s;
 }
 .searchWrap:focus-within {
-  border-color: rgba(var(--c-emerald), 0.4);
+  border-color: rgba(62, 207, 142, 0.5);
 }
+
 .searchInput {
+  flex: 1;
   background: transparent;
   border: none;
-  outline: none;
   color: rgb(var(--c-bone));
-  font-size: 0.875rem;
-  width: 100%;
-}
-.searchInput::placeholder {
-  color: rgba(var(--c-sage), 0.6);
-}
-
-.locationButton,
-.toggleButton,
-.shopChip {
-  border: 1px solid rgba(var(--c-moss-700), 0.7);
-  background: rgba(var(--c-moss-900), 0.95);
-  color: rgb(var(--c-bone));
-  border-radius: 999px;
-  padding: 0.6rem 0.85rem;
   font: inherit;
-  cursor: pointer;
+  font-size: 0.875rem;
+  outline: none;
+}
+.searchInput::placeholder { color: rgba(var(--c-sage), 0.7); }
+
+/* Divider between text search and camera */
+.searchDivider {
+  width: 1px;
+  height: 20px;
+  background: rgba(var(--c-moss-700), 1);
+  flex-shrink: 0;
 }
 
-.locationButton,
-.toggleButton {
+/* Camera / photo-search button inside the search bar */
+.cameraBtn {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(31,111,74,0.35), rgba(62,207,142,0.15));
+  border: 1px solid rgba(62,207,142,0.35);
+  color: rgb(var(--c-emerald));
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-family: var(--font-display);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s;
+  position: relative;
+}
+.cameraBtn:hover {
+  background: linear-gradient(135deg, rgba(31,111,74,0.55), rgba(62,207,142,0.25));
+  border-color: rgba(62,207,142,0.6);
+  transform: scale(1.02);
+  box-shadow: 0 0 16px rgba(62,207,142,0.2);
+}
+.cameraBtn::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(62,207,142,0.4), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.cameraBtn:hover::before { opacity: 1; }
+
+.cameraBtnLabel {
+  display: inline;
+}
+@media (max-width: 500px) {
+  .cameraBtnLabel { display: none; }
 }
 
+.locationButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.65rem 1rem;
+  border-radius: 12px;
+  background: rgba(var(--c-moss-800), 0.9);
+  border: 1px solid rgba(var(--c-moss-700), 0.8);
+  color: rgb(var(--c-sage));
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.locationButton:hover:not(:disabled) {
+  border-color: rgba(62, 207, 142, 0.5);
+  color: rgb(var(--c-bone));
+}
+.locationButton:disabled { opacity: 0.7; cursor: default; }
+
+.locDone {
+  border-color: rgba(62, 207, 142, 0.4) !important;
+  color: rgb(var(--c-emerald)) !important;
+}
+.locDenied {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: rgb(226, 87, 76);
+}
+
+.spin { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Shops inline bar */
 .inlineBar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 0.75rem;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
-  margin: 1rem 0 0.8rem;
 }
-
+.shopLabel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  color: rgb(var(--c-sage));
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
 .shopList {
   display: flex;
+  align-items: center;
+  gap: 0.4rem;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  min-height: 2.5rem;
+  flex: 1;
 }
-
 .shopChip {
-  color: rgb(var(--c-sage));
-  padding: 0.5rem 0.7rem;
+  background: rgba(var(--c-moss-800), 0.8);
+  border: 1px solid rgba(var(--c-moss-700), 0.6);
+  border-radius: 999px;
+  padding: 4px 12px;
   font-size: 0.76rem;
+  color: rgb(var(--c-sage));
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.shopChip:hover {
+  border-color: rgba(62, 207, 142, 0.4);
+  color: rgb(var(--c-bone));
+}
+/* (toggleButton removed — AI photo search moved into search bar) */
+
+/* Location prompt */
+.locPrompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 48px 20px;
+  background: rgba(var(--c-moss-800), 0.4);
+  border: 1px dashed rgba(var(--c-moss-700), 1);
+  border-radius: 16px;
+  color: rgb(var(--c-sage));
+  text-align: center;
+  margin-bottom: 24px;
+}
+.locPrompt p { margin: 0; font-size: 0.9rem; }
+
+/* Error */
+.errorBanner {
+  background: rgba(226, 87, 76, 0.1);
+  border: 1px solid rgba(226, 87, 76, 0.25);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  color: rgb(226, 87, 76);
+  margin-bottom: 16px;
 }
 
+/* Loading skeletons */
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.skeleton {
+  height: 280px;
+  border-radius: 16px;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--c-moss-800), 1) 25%,
+    rgba(var(--c-moss-700), 0.4) 50%,
+    rgba(var(--c-moss-800), 1) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+/* Result count */
 .resultCount {
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: rgb(var(--c-sage));
-  margin: 0.9rem 0 1rem 0;
+  margin: 0 0 1rem;
 }
 .resultCount strong {
-  color: rgb(var(--c-emerald));
-  font-family: var(--font-mono);
+  color: rgb(var(--c-bone));
+  font-variant-numeric: tabular-nums;
 }
+
+/* Empty state */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 48px 20px;
+  text-align: center;
+  color: rgb(var(--c-sage));
+}
+.emptyState p { margin: 0; font-size: 0.875rem; max-width: 320px; }

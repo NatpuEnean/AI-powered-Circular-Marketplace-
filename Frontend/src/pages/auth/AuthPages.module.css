@@ -326,3 +326,41 @@
   flex-shrink: 0;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── Guest / divider ─────────────────────────────────────────────────────── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0 12px;
+  color: rgb(var(--c-sage));
+  font-size: 0.75rem;
+}
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(var(--c-moss-700), 1);
+}
+
+.guestBtn {
+  width: 100%;
+  padding: 11px;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid rgba(var(--c-moss-700), 1);
+  color: rgb(var(--c-sage));
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.01em;
+}
+.guestBtn:hover {
+  border-color: rgba(62,207,142,0.35);
+  color: rgb(var(--c-bone));
+  background: rgba(62,207,142,0.04);
+}
+

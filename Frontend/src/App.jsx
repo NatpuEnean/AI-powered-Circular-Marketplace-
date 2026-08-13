@@ -1,65 +1,48 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/layout/ProtectedRoute';
-import DashboardLayout from './components/layout/DashboardLayout';
-import StatCard from './components/dashboard/StatCard';
-import Marketplace from './pages/customer/Marketplace';
-import LoginPage from './pages/auth/LoginPage';
+
+// Auth
+import LoginPage  from './pages/auth/LoginPage';
 import SignupPage from './pages/auth/SignupPage';
-import AddProduct from './pages/seller/AddProduct';
-import Inventory from './pages/seller/Inventory';
-import SellerDashboard from './pages/seller/SellerDashboard';
-import { Leaf, ShoppingBag, Package, Heart, Store, AlertTriangle } from 'lucide-react';
-import styles from './App.module.css';
 
-/* ─── Customer Dashboard Home ─────────────────────────────────────────────── */
-function CustomerHome() {
-  const { user } = useAuth();
-  return (
-    <DashboardLayout role="customer" title={`Good day, ${user?.name?.split(' ')[0] ?? 'there'} 👋`} subtitle="Customer overview">
-      <div className={styles.statsGrid}>
-        <StatCard icon={Leaf}        label="Waste Prevented (kg)" value={8.4}  decimals={1} accent="emerald" />
-        <StatCard icon={ShoppingBag} label="Money Saved"          value={2450} prefix="₹"  accent="harvest" />
-        <StatCard icon={Package}     label="Products Rescued"     value={24}               accent="pine"    />
-        <StatCard icon={Heart}       label="Eco Points"           value={1240}             accent="emerald" />
-      </div>
-      <p className={styles.placeholder}>Browse the <strong>Marketplace</strong> to discover circular products near you.</p>
-    </DashboardLayout>
-  );
-}
+// Customer
+import CustomerHome       from './pages/customer/CustomerHome';
+import Marketplace        from './pages/customer/Marketplace';
+import MyOrders           from './pages/customer/MyOrders';
+import Wishlist           from './pages/customer/Wishlist';
+import CustomerDonations  from './pages/customer/CustomerDonations';
+import Rewards            from './pages/customer/Rewards';
+import MyImpact           from './pages/customer/MyImpact';
 
-/* ─── Seller Dashboard Home ───────────────────────────────────────────────── */
-function SellerHome() {
-  return <SellerDashboard />;
-}
+// Seller
+import SellerDashboard  from './pages/seller/SellerDashboard';
+import AddProduct       from './pages/seller/AddProduct';
+import Inventory        from './pages/seller/Inventory';
+import SellerOrders     from './pages/seller/SellerOrders';
+import ExpiryMonitor    from './pages/seller/ExpiryMonitor';
+import AIPricing        from './pages/seller/AIPricing';
+import SellerDonations  from './pages/seller/SellerDonations';
+import SellerAnalytics  from './pages/seller/SellerAnalytics';
 
-/* ─── NGO / Admin placeholders ────────────────────────────────────────────── */
-function NGOHome() {
-  return (
-    <DashboardLayout role="ngo" title="NGO Portal" subtitle="Manage donations & pickups">
-      <p className={styles.placeholder}>NGO portal features are coming soon.</p>
-    </DashboardLayout>
-  );
-}
+// NGO
+import NGODashboard       from './pages/ngo/NGODashboard';
+import AvailableDonations from './pages/ngo/AvailableDonations';
+import MyRequests         from './pages/ngo/MyRequests';
+import ActivePickups      from './pages/ngo/ActivePickups';
+import DonationHistory    from './pages/ngo/DonationHistory';
+import NGOImpact          from './pages/ngo/NGOImpact';
 
-function AdminHome() {
-  return (
-    <DashboardLayout role="admin" title="Admin Panel" subtitle="Platform management">
-      <p className={styles.placeholder}>Admin portal features are coming soon.</p>
-    </DashboardLayout>
-  );
-}
+// Admin
+import AdminDashboard from './pages/admin/AdminDashboard';
+import ManageUsers    from './pages/admin/ManageUsers';
+import ManageSellers  from './pages/admin/ManageSellers';
+import ManageProducts from './pages/admin/ManageProducts';
+import Reports        from './pages/admin/Reports';
 
-/* ─── Smart root redirect ─────────────────────────────────────────────────── */
-function RootRedirect() {
-  const { user, loading } = useAuth();
-  if (loading) return null;
-  if (!user) return <Navigate to="/login" replace />;
-  const roleMap = { CUSTOMER: '/customer', SELLER: '/seller', NGO: '/ngo', ADMIN: '/admin' };
-  return <Navigate to={roleMap[user.role] || '/customer'} replace />;
-}
+/* ─── Wrap each page in ProtectedRoute (auth bypassed in dev) ─────────────── */
+const P = ({ children }) => <ProtectedRoute>{children}</ProtectedRoute>;
 
-/* ─── App ─────────────────────────────────────────────────────────────────── */
 export default function App() {
   return (
     <AuthProvider>
@@ -67,62 +50,41 @@ export default function App() {
         {/* Public */}
         <Route path="/login"  element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/"       element={<Navigate to="/login" replace />} />
 
-        {/* Root smart redirect */}
-        <Route path="/" element={<RootRedirect />} />
+        {/* ── Customer ────────────────────────────────────────────────────── */}
+        <Route path="/customer"              element={<P><CustomerHome /></P>} />
+        <Route path="/customer/marketplace"  element={<P><Marketplace /></P>} />
+        <Route path="/customer/orders"       element={<P><MyOrders /></P>} />
+        <Route path="/customer/wishlist"     element={<P><Wishlist /></P>} />
+        <Route path="/customer/donations"    element={<P><CustomerDonations /></P>} />
+        <Route path="/customer/rewards"      element={<P><Rewards /></P>} />
+        <Route path="/customer/impact"       element={<P><MyImpact /></P>} />
 
-        {/* Customer */}
-        <Route path="/customer" element={
-          <ProtectedRoute roles={['CUSTOMER', 'ADMIN']}>
-            <CustomerHome />
-          </ProtectedRoute>
-        } />
-        <Route path="/customer/marketplace" element={
-          <ProtectedRoute roles={['CUSTOMER', 'SELLER', 'ADMIN']}>
-            <Marketplace />
-          </ProtectedRoute>
-        } />
-        <Route path="/customer/*" element={
-          <ProtectedRoute roles={['CUSTOMER', 'ADMIN']}>
-            <CustomerHome />
-          </ProtectedRoute>
-        } />
+        {/* ── Seller ──────────────────────────────────────────────────────── */}
+        <Route path="/seller"              element={<P><SellerDashboard /></P>} />
+        <Route path="/seller/add-product"  element={<P><AddProduct /></P>} />
+        <Route path="/seller/inventory"    element={<P><Inventory /></P>} />
+        <Route path="/seller/orders"       element={<P><SellerOrders /></P>} />
+        <Route path="/seller/expiry"       element={<P><ExpiryMonitor /></P>} />
+        <Route path="/seller/ai-pricing"   element={<P><AIPricing /></P>} />
+        <Route path="/seller/donations"    element={<P><SellerDonations /></P>} />
+        <Route path="/seller/analytics"    element={<P><SellerAnalytics /></P>} />
 
-        {/* Seller */}
-        <Route path="/seller" element={
-          <ProtectedRoute roles={['SELLER', 'ADMIN']}>
-            <SellerHome />
-          </ProtectedRoute>
-        } />
-        <Route path="/seller/add-product" element={
-          <ProtectedRoute roles={['SELLER', 'ADMIN']}>
-            <AddProduct />
-          </ProtectedRoute>
-        } />
-        <Route path="/seller/inventory" element={
-          <ProtectedRoute roles={['SELLER', 'ADMIN']}>
-            <Inventory />
-          </ProtectedRoute>
-        } />
-        <Route path="/seller/*" element={
-          <ProtectedRoute roles={['SELLER', 'ADMIN']}>
-            <SellerHome />
-          </ProtectedRoute>
-        } />
+        {/* ── NGO ─────────────────────────────────────────────────────────── */}
+        <Route path="/ngo"            element={<P><NGODashboard /></P>} />
+        <Route path="/ngo/available"  element={<P><AvailableDonations /></P>} />
+        <Route path="/ngo/requests"   element={<P><MyRequests /></P>} />
+        <Route path="/ngo/pickups"    element={<P><ActivePickups /></P>} />
+        <Route path="/ngo/history"    element={<P><DonationHistory /></P>} />
+        <Route path="/ngo/impact"     element={<P><NGOImpact /></P>} />
 
-        {/* NGO */}
-        <Route path="/ngo/*" element={
-          <ProtectedRoute roles={['NGO', 'ADMIN']}>
-            <NGOHome />
-          </ProtectedRoute>
-        } />
-
-        {/* Admin */}
-        <Route path="/admin/*" element={
-          <ProtectedRoute roles={['ADMIN']}>
-            <AdminHome />
-          </ProtectedRoute>
-        } />
+        {/* ── Admin ───────────────────────────────────────────────────────── */}
+        <Route path="/admin"           element={<P><AdminDashboard /></P>} />
+        <Route path="/admin/users"     element={<P><ManageUsers /></P>} />
+        <Route path="/admin/sellers"   element={<P><ManageSellers /></P>} />
+        <Route path="/admin/products"  element={<P><ManageProducts /></P>} />
+        <Route path="/admin/reports"   element={<P><Reports /></P>} />
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />

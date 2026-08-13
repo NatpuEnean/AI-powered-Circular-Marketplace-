@@ -1,84 +1,163 @@
 import { useRef, useState } from 'react';
-import { Search, Upload, Sparkles } from 'lucide-react';
+import { Upload, Sparkles, X, Loader, AlertCircle, Package, MapPin } from 'lucide-react';
+import { marketplaceService } from '../../services/marketplace';
 import styles from './AiSearchPanel.module.css';
 
-const similarItems = [
-  {
-    id: 'a1',
-    name: 'Organic Cotton Tote',
-    match: '92%',
-    image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&q=80',
-  },
-  {
-    id: 'a2',
-    name: 'Reusable Bottle',
-    match: '89%',
-    image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600&q=80',
-  },
-  {
-    id: 'a3',
-    name: 'Natural Soap Set',
-    match: '84%',
-    image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&q=80',
-  },
-];
-
-export default function AiSearchPanel() {
+export default function AiSearchPanel({ userLat, userLng }) {
   const fileInputRef = useRef(null);
-  const [preview, setPreview] = useState('');
-  const [query, setQuery] = useState('');
+  const [preview, setPreview]   = useState('');
+  const [file, setFile]         = useState(null);
+  const [results, setResults]   = useState([]);
+  const [searched, setSearched] = useState(false);
+  const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState('');
 
   function onFileSelected(event) {
-    const file = event.target.files?.[0];
-    if (!file) return;
+    const f = event.target.files?.[0];
+    if (!f) return;
+    setFile(f);
+    setResults([]);
+    setSearched(false);
+    setError('');
     const reader = new FileReader();
     reader.onload = () => setPreview(String(reader.result || ''));
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(f);
+  }
+
+  function clearPhoto() {
+    setFile(null);
+    setPreview('');
+    setResults([]);
+    setSearched(false);
+    setError('');
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  }
+
+  async function handleSearch() {
+    if (!file) return;
+    setLoading(true);
+    setError('');
+    try {
+      const data = await marketplaceService.aiSearch(
+        file,
+        userLat || 0,
+        userLng || 0,
+        25
+      );
+      setResults(data);
+      setSearched(true);
+    } catch (err) {
+      setError('AI search failed. Make sure the backend is running.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
     <div className={styles.panel}>
       <div className={styles.headerRow}>
         <div>
-          <p className={styles.kicker}>AI discovery</p>
-          <h3>Find similar products</h3>
+          <p className={styles.kicker}>AI Discovery</p>
+          <h3 className={styles.heading}>Find by photo</h3>
         </div>
         <Sparkles size={18} className={styles.sparkle} />
       </div>
 
-      <div className={styles.searchRow}>
-        <Search size={16} />
-        <input
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="Describe a product or upload a photo"
-        />
-      </div>
+      <p className={styles.hint}>
+        Upload a photo of any product — our AI will find visually similar items available near you.
+      </p>
 
-      <button className={styles.uploadButton} type="button" onClick={() => fileInputRef.current?.click()}>
-        <Upload size={16} />
-        Upload product photo
-      </button>
-      <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={onFileSelected} />
-
-      {preview ? (
+      {/* Upload area */}
+      {!preview ? (
+        <button
+          id="ai-upload-btn"
+          type="button"
+          className={styles.uploadButton}
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <Upload size={16} />
+          Upload product photo
+        </button>
+      ) : (
         <div className={styles.previewBox}>
           <img src={preview} alt="Upload preview" />
+          <button
+            type="button"
+            className={styles.clearBtn}
+            onClick={clearPhoto}
+            aria-label="Remove photo"
+          >
+            <X size={14} />
+          </button>
         </div>
-      ) : null}
+      )}
 
-      <div className={styles.resultsLabel}>Similar products near you</div>
-      <div className={styles.resultList}>
-        {similarItems.map((item) => (
-          <div key={item.id} className={styles.item}>
-            <img src={item.image} alt={item.name} />
-            <div>
-              <strong>{item.name}</strong>
-              <span>{item.match} match</span>
-            </div>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        hidden
+        onChange={onFileSelected}
+      />
+
+      {/* Search trigger */}
+      {file && !searched && (
+        <button
+          id="ai-search-btn"
+          type="button"
+          className={styles.searchBtn}
+          onClick={handleSearch}
+          disabled={loading}
+        >
+          {loading
+            ? <><Loader size={15} className={styles.spin} /> Analysing…</>
+            : <><Sparkles size={15} /> Find Similar Products</>}
+        </button>
+      )}
+
+      {/* Error */}
+      {error && (
+        <div className={styles.errorMsg}>
+          <AlertCircle size={14} /> {error}
+        </div>
+      )}
+
+      {/* Results */}
+      {searched && (
+        <>
+          <div className={styles.resultsLabel}>
+            {results.length === 0
+              ? 'No similar products found nearby'
+              : `${results.length} similar product${results.length !== 1 ? 's' : ''} found near you`}
           </div>
-        ))}
-      </div>
+          <div className={styles.resultList}>
+            {results.slice(0, 6).map((item) => (
+              <div key={item.id} className={`${styles.item} ${item.aiMatch ? styles.itemMatch : ''}`}>
+                <div className={styles.itemImage}>
+                  {item.imageBase64 ? (
+                    <img src={`data:image/jpeg;base64,${item.imageBase64}`} alt={item.name} />
+                  ) : (
+                    <Package size={20} />
+                  )}
+                </div>
+                <div className={styles.itemInfo}>
+                  <strong>{item.name}</strong>
+                  <span className={styles.itemCategory}>{item.category}</span>
+                  <div className={styles.itemMeta}>
+                    <span className={styles.itemPrice}>₹{item.price?.toLocaleString('en-IN')}</span>
+                    {item.distanceKm != null && (
+                      <span className={styles.itemDist}>
+                        <MapPin size={11} /> {item.distanceKm} km
+                      </span>
+                    )}
+                    {item.aiMatch && <span className={styles.matchBadge}>✦ Best match</span>}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }
