@@ -1,0 +1,32 @@
+.iconRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.iconBox {
+  height: 2.25rem;
+  width: 2.25rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.emerald { color: rgb(var(--c-emerald)); background: rgba(var(--c-emerald), 0.1); }
+.harvest { color: rgb(var(--c-harvest)); background: rgba(var(--c-harvest), 0.1); }
+.pine { color: rgb(var(--c-pine)); background: rgba(var(--c-pine), 0.2); }
+.ember { color: rgb(var(--c-ember)); background: rgba(var(--c-ember), 0.1); }
+
+.value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgb(var(--c-bone));
+  margin: 0;
+}
+.label {
+  font-size: 0.75rem;
+  color: rgb(var(--c-sage));
+  margin: 0.25rem 0 0 0;
+}

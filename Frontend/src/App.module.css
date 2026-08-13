@@ -1,0 +1,41 @@
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+@media (min-width: 1024px) {
+  .statsGrid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.placeholder {
+  font-size: 0.875rem;
+  color: rgb(var(--c-sage));
+}
+
+.switcher {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 50;
+  display: flex;
+  gap: 0.25rem;
+  background: rgb(var(--c-moss-900));
+  border: 1px solid rgb(var(--c-moss-700));
+  border-radius: 9999px;
+  padding: 0.25rem;
+  box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+}
+.switchLink {
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: rgb(var(--c-sage));
+  transition: color 0.2s, background 0.2s;
+}
+.switchLink:hover { color: rgb(var(--c-bone)); }
+.switchActive {
+  background: rgb(var(--c-pine));
+  color: rgb(var(--c-bone));
+}

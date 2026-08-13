@@ -1,0 +1,118 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 4rem;
+  padding: 0 1rem;
+  border-bottom: 1px solid rgba(var(--c-moss-700), 0.6);
+  background: rgba(var(--c-ink), 0.8);
+  backdrop-filter: blur(8px);
+}
+@media (min-width: 768px) {
+  .header { padding: 0 1.5rem; }
+}
+
+.menuButton {
+  background: none;
+  border: none;
+  color: rgb(var(--c-sage));
+  cursor: pointer;
+  display: flex;
+}
+.menuButton:hover { color: rgb(var(--c-bone)); }
+@media (min-width: 768px) {
+  .menuButton { display: none; }
+}
+
+.titleWrap {
+  min-width: 0;
+  flex: 1;
+}
+.title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: rgb(var(--c-bone));
+  font-size: 1rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (min-width: 768px) {
+  .title { font-size: 1.125rem; }
+}
+.subtitle {
+  font-size: 0.75rem;
+  color: rgb(var(--c-sage));
+  margin: 0;
+  display: none;
+}
+@media (min-width: 640px) {
+  .subtitle { display: block; }
+}
+
+.searchBox {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgb(var(--c-moss-900));
+  border: 1px solid rgba(var(--c-moss-700), 0.6);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  width: 16rem;
+  transition: border-color 0.2s;
+}
+.searchBox:focus-within {
+  border-color: rgba(var(--c-emerald), 0.4);
+}
+@media (min-width: 768px) {
+  .searchBox { display: flex; }
+}
+.searchInput {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: rgb(var(--c-bone));
+  font-size: 0.875rem;
+  width: 100%;
+}
+.searchInput::placeholder {
+  color: rgba(var(--c-sage), 0.6);
+}
+
+.bellButton {
+  position: relative;
+  background: none;
+  border: none;
+  color: rgb(var(--c-sage));
+  cursor: pointer;
+  display: flex;
+}
+.bellButton:hover { color: rgb(var(--c-bone)); }
+.bellDot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 9999px;
+  background: rgb(var(--c-harvest));
+}
+
+.avatar {
+  height: 2.25rem;
+  width: 2.25rem;
+  border-radius: 9999px;
+  background: rgba(var(--c-pine), 0.3);
+  border: 1px solid rgba(var(--c-pine), 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(var(--c-emerald));
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: var(--font-display);
+}

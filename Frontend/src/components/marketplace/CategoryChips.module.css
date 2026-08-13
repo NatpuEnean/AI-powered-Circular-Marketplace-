@@ -1,0 +1,31 @@
+.row {
+  display: flex;
+  gap: 0.6rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: thin;
+}
+
+.chip {
+  flex-shrink: 0;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid rgba(var(--c-moss-700), 0.7);
+  background: rgb(var(--c-moss-900));
+  color: rgb(var(--c-sage));
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.chip:hover {
+  color: rgb(var(--c-bone));
+  border-color: rgba(var(--c-emerald), 0.35);
+}
+.chipActive {
+  background: rgb(var(--c-pine));
+  color: rgb(var(--c-bone));
+  border-color: rgb(var(--c-pine));
+  box-shadow: 0 0 16px -4px rgba(var(--c-emerald), 0.5);
+}
