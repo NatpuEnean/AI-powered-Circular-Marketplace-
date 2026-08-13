@@ -1,3 +1,11 @@
+.topBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .searchWrap {
   display: flex;
   align-items: center;
@@ -6,7 +14,9 @@
   border: 1px solid rgba(var(--c-moss-700), 0.6);
   border-radius: 0.65rem;
   padding: 0.65rem 1rem;
-  max-width: 420px;
+  flex: 1;
+  min-width: 280px;
+  max-width: 500px;
   transition: border-color 0.2s ease;
 }
 .searchWrap:focus-within {
@@ -22,6 +32,47 @@
 }
 .searchInput::placeholder {
   color: rgba(var(--c-sage), 0.6);
+}
+
+.locationButton,
+.toggleButton,
+.shopChip {
+  border: 1px solid rgba(var(--c-moss-700), 0.7);
+  background: rgba(var(--c-moss-900), 0.95);
+  color: rgb(var(--c-bone));
+  border-radius: 999px;
+  padding: 0.6rem 0.85rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.locationButton,
+.toggleButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.inlineBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 1rem 0 0.8rem;
+}
+
+.shopList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+}
+
+.shopChip {
+  color: rgb(var(--c-sage));
+  padding: 0.5rem 0.7rem;
+  font-size: 0.76rem;
 }
 
 .resultCount {

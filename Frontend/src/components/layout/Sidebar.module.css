@@ -118,3 +118,56 @@
   color: rgb(var(--c-bone));
   background: rgb(var(--c-moss-800));
 }
+
+.userCard {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(var(--c-moss-700), 0.3);
+  margin-bottom: 4px;
+}
+.userAvatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgb(var(--c-pine)), rgb(var(--c-emerald)));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 700;
+  color: rgb(var(--c-ink));
+  flex-shrink: 0;
+}
+.userInfo { overflow: hidden; }
+.userName {
+  font-size: 0.825rem; font-weight: 600;
+  color: rgb(var(--c-bone));
+  margin: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.userEmail {
+  font-size: 0.7rem;
+  color: rgb(var(--c-sage));
+  margin: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.logoutBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(226,87,76,0.8);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: color 0.2s, background 0.2s;
+}
+.logoutBtn:hover {
+  color: rgb(226,87,76);
+  background: rgba(226,87,76,0.08);
+}
