@@ -1,5 +1,5 @@
 package com.example.backend.marketplace.model;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -58,6 +58,7 @@ public class Product {
     private Integer quantity = 1;
 
     // Optional condition field: new, like-new, good, fair
+    @Column(name = "product_condition")
     private String condition;
 
     @ManyToOne(fetch = FetchType.LAZY)
