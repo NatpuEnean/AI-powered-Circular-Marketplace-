@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/layout/ProtectedRoute';
-
+import LandingPage from './pages/landing/LandingPage';
 // Auth
 import LoginPage  from './pages/auth/LoginPage';
 import SignupPage from './pages/auth/SignupPage';
@@ -48,9 +48,9 @@ export default function App() {
     <AuthProvider>
       <Routes>
         {/* Public */}
-        <Route path="/login"  element={<LoginPage />} />
+        <Route path="/"  element={<LandingPage/>} />
+        <Route path="/login"       element={<LoginPage/>} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/"       element={<Navigate to="/login" replace />} />
 
         {/* ── Customer ────────────────────────────────────────────────────── */}
         <Route path="/customer"              element={<P><CustomerHome /></P>} />
