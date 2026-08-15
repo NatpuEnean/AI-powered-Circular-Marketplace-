@@ -1,18 +1,22 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = 'https://ai-powered-circular-marketplace-production.up.railway.app';
 
 const api = axios.create({
   baseURL: BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
 // Attach JWT token to every request
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('cm_token');
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });
 
@@ -25,6 +29,7 @@ api.interceptors.response.use(
       localStorage.removeItem('cm_user');
       window.location.href = '/login';
     }
+
     return Promise.reject(err);
   }
 );
