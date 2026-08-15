@@ -67,7 +67,8 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of(
             "http://localhost:3000",
             "http://localhost:5173",
-            "http://localhost:5175"
+            "http://localhost:5175",
+            "https://energetic-harmony-production-160f.up.railway.app"
         ));
 
         config.setAllowedMethods(List.of(
