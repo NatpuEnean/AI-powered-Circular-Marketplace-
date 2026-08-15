@@ -68,7 +68,7 @@ public class SecurityConfig {
             "http://localhost:3000",
             "http://localhost:5173",
             "http://localhost:5175",
-            "http://circlo.up.railway.app"
+            "https://circlo.up.railway.app"
         ));
 
         config.setAllowedMethods(List.of(
